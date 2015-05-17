@@ -1,0 +1,3 @@
+Warning[206] E:\STORAGE\1-EOICT\MICROCONTROLLERS\LAB 07\TEMPLATEDWENGO.ASM 147 : Found call to macro in column 1. (LCD_Init)
+Warning[206] E:\STORAGE\1-EOICT\MICROCONTROLLERS\LAB 07\TEMPLATEDWENGO.ASM 148 : Found call to macro in column 1. (LCD_Lijn1)
+Warning[206] E:\STORAGE\1-EOICT\MICROCONTROLLERS\LAB 07\TEMPLATEDWENGO.ASM 149 : Found call to macro in column 1. (Schrijfcijfer)

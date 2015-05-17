@@ -1,0 +1,56 @@
+HighInt:
+	btfsc INTCON,RBIF
+	bra KnopNofS
+	bra HighIntEinde
+KnopNofS:
+	btfss PORTB,4
+	bra veranderN
+	btfss PORTB,5
+	bra veranderS
+	bra HighIntEinde
+veranderN:
+	bsf T0CON, T0PS0
+	bra HighIntEinde
+veranderS:
+	bcf T0CON, T0PS0
+	bsf T0CON, TMR0ON
+	bra HighIntEinde
+HighIntEinde:
+	bcf INTCON,RBIF
+	Retfie FAST			; terugkeren
+
+
+
+; ===============
+; HOOFDPROGRAMMA
+; ===============
+
+	bcf T0CON, T08BIT
+	bcf T0CON, T0CS
+	bcf T0CON, PSA
+	bsf T0CON, T0PS2
+	bsf T0CON, T0PS1
+	bsf T0CON, T0PS0
+
+	bcf RCON,IPEN		; prioriteiten uit
+	bsf INTCON,GIE		; glob.int. aan
+	bsf INTCON,RBIE		; int portb aan
+
+	movlw 0x2B
+	movwf TMR0H
+	movlw 0x98
+	movwf TMR0L
+
+
+
+lus:
+	btfss INTCON, TMR0IF
+	bra lus
+	comf LATD
+	movlw 0x2B
+	movwf TMR0H
+	movlw 0x98
+	movwf TMR0L
+
+	bcf INTCON, TMR0IF
+	bra lus

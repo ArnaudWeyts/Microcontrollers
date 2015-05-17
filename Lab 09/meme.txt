@@ -1,0 +1,57 @@
+HighInt:
+	btfsc INTCON,RBIF
+	bra KnopNofS
+	btfsc INTCON,INT0IF
+	bra KnopW
+	btfsc INTCON3,INT1IF
+	bra KnopE
+	bra HighIntEinde
+KnopNofS:
+	btfss PORTB,4
+	setf LATD
+	btfss PORTB,5
+	clrf LATD
+	bra HighIntEinde
+KnopW:
+	btfss PORTB,0
+	rlncf LATD,1,0
+	bsf LATD,0
+	bra HighIntEinde
+KnopE:
+	btfss PORTB,1
+	rrncf LATD,1,0
+	bcf LATD,7
+	bra HighIntEinde
+HighIntEinde:
+	bcf INTCON,RBIF
+	bcf INTCON,INT0IF
+	bcf INTCON3,INT1IF
+	call Delay
+	Retfie FAST			; terugkeren
+
+
+	HighInt:
+	btfsc INTCON,RBIF
+	bra KnopNofS
+	btfsc INTCON,INT0IF
+	bra KnopW
+	btfsc INTCON3,INT1IF
+	bra KnopE
+	bra HighIntEinde
+KnopNofS:
+	btfss PORTB,4
+	setf LATD
+	btfss PORTB,5
+	clrf LATD
+	bra HighIntEinde
+KnopW:
+	bcf INTCON,RBIE
+	bra HighIntEinde
+KnopE:
+	bsf INTCON,RBIE
+	bra HighIntEinde
+HighIntEinde:
+	bcf INTCON,RBIF
+	bcf INTCON,INT0IF
+	bcf INTCON3,INT1IF
+	Retfie FAST			; terugkeren

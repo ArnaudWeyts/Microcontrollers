@@ -1,0 +1,83 @@
+Opgave 1
+	;High priority interrupt routine
+	; The high priority interrupt code is placed here to avoid conflicting with
+	; the low priority interrupt vector.
+			CODE
+
+	HighInt:
+		btfsc INTCON,RBIF
+		bra KnopNofS
+		bra HighIntEinde
+	KnopNofS:
+		btfss PORTB,4
+		setf LATD
+		btfss PORTB,5
+		clrf LATD
+	HighIntEinde:
+		bcf INTCON,RBIF
+		Retfie FAST			; terugkeren
+
+	; ===============
+	; HOOFDPROGRAMMA
+	; ===============
+
+		setf TRISB			; port N als ingang
+		clrf TRISD			; port D als uitgang
+		bcf RCON,IPEN		; prioriteiten uit
+		bsf INTCON,GIE		; glob.int. aan
+		bsf INTCON,RBIE		; int portb
+	lus:
+		sleep
+		bra lus
+
+Opgave 2
+	;INTERUPT
+
+	HighInt:
+		btfsc INTCON,RBIF
+		bra KnopNofS
+		btfsc INTCON,INT0IF
+		bra KnopW
+		btfsc INTCON3,INT1IF
+		bra KnopE
+		bra HighIntEinde
+	KnopNofS:
+		btfss PORTB,4
+		btg LATD,0
+		btfss PORTB,5
+		btg LATD,1
+		bra HighIntEinde
+	KnopW:
+		btfss PORTB,0
+		bra setall
+		bra HighIntEinde
+	KnopE:
+		btfss PORTB,1
+		bra clrall
+		bra HighIntEinde
+	setall:
+		bsf LATD,0
+		bsf LATD,1
+		bra HighIntEinde
+	clrall:
+		clrf LATD,0
+		clrf LATD,1
+		bra HighIntEinde
+	HighIntEinde:
+		bcf INTCON,RBIF
+		bcf INTCON,INT0IF
+		bcf INTCON3,INT1IF
+		Retfie FAST			; terugkeren
+
+	;HOOFDPROGRAMMA
+
+		setf TRISB			; port N als ingang
+		clrf TRISD			; port D als uitgang
+		bcf RCON,IPEN		; prioriteiten uit
+		bsf INTCON,GIE		; glob.int. aan
+		bsf INTCON,RBIE		; int portb aan
+		bsf INTCON,INT0IE	; int 0 aan
+		bsf INTCON3,INT1IE	; int 1 aan
+	lus:
+		sleep
+		bra lus
